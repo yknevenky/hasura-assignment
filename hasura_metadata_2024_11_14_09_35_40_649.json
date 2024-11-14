@@ -1,0 +1,1009 @@
+{
+  "resource_version": 91,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "Mongodb",
+        "kind": "Mongo",
+        "tables": [
+          {
+            "table": [
+              "categories"
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "description",
+                    "created_at",
+                    "updated_at",
+                    "_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "django",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "description",
+                    "created_at",
+                    "updated_at",
+                    "_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "description",
+                    "created_at",
+                    "updated_at",
+                    "_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": [
+              "products"
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "_id": "product_id"
+                    },
+                    "relationship_type": "object",
+                    "source": "Postgres",
+                    "table": {
+                      "name": "order_items",
+                      "schema": "ECommerce"
+                    }
+                  }
+                },
+                "name": "order_product_relation"
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "description",
+                    "price",
+                    "category_id",
+                    "variants",
+                    "images",
+                    "created_at",
+                    "updated_at",
+                    "_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "django",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "description",
+                    "price",
+                    "category_id",
+                    "variants",
+                    "images",
+                    "created_at",
+                    "updated_at",
+                    "_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "name",
+                    "description",
+                    "price",
+                    "category_id",
+                    "variants",
+                    "images",
+                    "created_at",
+                    "updated_at",
+                    "_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "template": null,
+          "timeout": null,
+          "value": {
+            "connection": "mongodb://mongouser:mongopassword@mongodb:27017",
+            "db": "ecommerce"
+          }
+        }
+      },
+      {
+        "name": "Postgres",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "name": "cart_items",
+              "schema": "ECommerce"
+            },
+            "object_relationships": [
+              {
+                "name": "cart",
+                "using": {
+                  "foreign_key_constraint_on": "cart_id"
+                }
+              }
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "product_id": "_id"
+                    },
+                    "relationship_type": "object",
+                    "source": "Mongodb",
+                    "table": [
+                      "products"
+                    ]
+                  }
+                },
+                "name": "cart_product_relationship"
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "check": {
+                    "cart": {
+                      "user": {
+                        "id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  },
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "cart_id",
+                    "id"
+                  ]
+                },
+                "comment": ""
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "cart_id",
+                    "id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "cart_id",
+                    "id"
+                  ],
+                  "filter": {
+                    "cart": {
+                      "user": {
+                        "id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                },
+                "comment": ""
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "cart_id",
+                    "id"
+                  ],
+                  "filter": {
+                    "cart": {
+                      "user": {
+                        "id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  },
+                  "check": null
+                },
+                "comment": ""
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "filter": {
+                    "cart": {
+                      "user_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "carts",
+              "schema": "ECommerce"
+            },
+            "object_relationships": [
+              {
+                "name": "user",
+                "using": {
+                  "foreign_key_constraint_on": "user_id"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "cart_items",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "cart_id",
+                    "table": {
+                      "name": "cart_items",
+                      "schema": "ECommerce"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "check": {
+                    "user_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "columns": [
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ]
+                },
+                "comment": ""
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ],
+                  "filter": {
+                    "user_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  }
+                },
+                "comment": ""
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ],
+                  "filter": {
+                    "user_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "check": null
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "inventory",
+              "schema": "ECommerce"
+            },
+            "insert_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "quantity",
+                    "updated_at",
+                    "product_id"
+                  ]
+                },
+                "comment": ""
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "columns": [
+                    "quantity",
+                    "updated_at",
+                    "product_id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "quantity",
+                    "product_id",
+                    "updated_at"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "columns": [
+                    "quantity",
+                    "updated_at",
+                    "product_id"
+                  ],
+                  "filter": {},
+                  "check": null
+                },
+                "comment": ""
+              }
+            ],
+            "delete_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "filter": {}
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "order_items",
+              "schema": "ECommerce"
+            },
+            "object_relationships": [
+              {
+                "name": "order",
+                "using": {
+                  "foreign_key_constraint_on": "order_id"
+                }
+              }
+            ],
+            "remote_relationships": [
+              {
+                "definition": {
+                  "to_source": {
+                    "field_mapping": {
+                      "product_id": "_id"
+                    },
+                    "relationship_type": "object",
+                    "source": "Mongodb",
+                    "table": [
+                      "products"
+                    ]
+                  }
+                },
+                "name": "product_order_relationship"
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "price",
+                    "id",
+                    "order_id"
+                  ]
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "price",
+                    "id",
+                    "order_id"
+                  ]
+                },
+                "comment": ""
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "price",
+                    "id",
+                    "order_id"
+                  ],
+                  "filter": {
+                    "order": {
+                      "user_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                },
+                "comment": ""
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "product_id",
+                    "quantity",
+                    "price",
+                    "id",
+                    "order_id"
+                  ],
+                  "filter": {
+                    "order": {
+                      "user_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  },
+                  "check": null
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "orders",
+              "schema": "ECommerce"
+            },
+            "object_relationships": [
+              {
+                "name": "user",
+                "using": {
+                  "foreign_key_constraint_on": "user_id"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "order_items",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "order_id",
+                    "table": {
+                      "name": "order_items",
+                      "schema": "ECommerce"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "payments",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "order_id",
+                    "table": {
+                      "name": "payments",
+                      "schema": "ECommerce"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "payment_status",
+                    "status",
+                    "total_amount",
+                    "shipping_address",
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ]
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "check": {
+                    "user_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "columns": [
+                    "payment_status",
+                    "status",
+                    "total_amount",
+                    "shipping_address",
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ]
+                },
+                "comment": ""
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "payment_status",
+                    "status",
+                    "total_amount",
+                    "shipping_address",
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ],
+                  "filter": {
+                    "user_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  }
+                },
+                "comment": ""
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "payment_status",
+                    "status",
+                    "total_amount",
+                    "shipping_address",
+                    "created_at",
+                    "updated_at",
+                    "id",
+                    "user_id"
+                  ],
+                  "filter": {
+                    "user_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "check": null
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "payments",
+              "schema": "ECommerce"
+            },
+            "object_relationships": [
+              {
+                "name": "order",
+                "using": {
+                  "foreign_key_constraint_on": "order_id"
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "payment_method",
+                    "payment_status",
+                    "amount",
+                    "created_at",
+                    "id",
+                    "order_id"
+                  ]
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "check": {
+                    "order": {
+                      "user_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  },
+                  "columns": [
+                    "payment_method",
+                    "payment_status",
+                    "amount",
+                    "created_at",
+                    "id",
+                    "order_id"
+                  ]
+                },
+                "comment": ""
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "payment_method",
+                    "payment_status",
+                    "amount",
+                    "created_at",
+                    "id",
+                    "order_id"
+                  ],
+                  "filter": {
+                    "order": {
+                      "user_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                },
+                "comment": ""
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "payment_method",
+                    "payment_status",
+                    "amount",
+                    "created_at",
+                    "id",
+                    "order_id"
+                  ],
+                  "filter": {
+                    "order": {
+                      "user_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  },
+                  "check": null
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "users",
+              "schema": "ECommerce"
+            },
+            "array_relationships": [
+              {
+                "name": "carts",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "user_id",
+                    "table": {
+                      "name": "carts",
+                      "schema": "ECommerce"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "orders",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "user_id",
+                    "table": {
+                      "name": "orders",
+                      "schema": "ECommerce"
+                    }
+                  }
+                }
+              }
+            ],
+            "insert_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "check": {},
+                  "columns": [
+                    "address",
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password",
+                    "phone_number",
+                    "created_at",
+                    "updated_at",
+                    "id"
+                  ]
+                },
+                "comment": ""
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "django",
+                "permission": {
+                  "columns": [
+                    "address",
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password",
+                    "phone_number",
+                    "created_at",
+                    "updated_at",
+                    "id"
+                  ],
+                  "filter": {}
+                },
+                "comment": ""
+              },
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "address",
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password",
+                    "phone_number",
+                    "created_at",
+                    "updated_at",
+                    "id"
+                  ],
+                  "filter": {
+                    "id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  }
+                },
+                "comment": ""
+              }
+            ],
+            "update_permissions": [
+              {
+                "role": "user",
+                "permission": {
+                  "columns": [
+                    "address",
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password",
+                    "phone_number"
+                  ],
+                  "filter": {
+                    "id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
+                  },
+                  "check": null
+                },
+                "comment": ""
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "database_url": {
+              "from_env": "HASURA_GRAPHQL_DATABASE_URL"
+            },
+            "isolation_level": "read-committed",
+            "use_prepared_statements": false
+          }
+        }
+      }
+    ],
+    "query_collections": [
+      {
+        "name": "allowed-queries",
+        "definition": {
+          "queries": [
+            {
+              "name": "getCartItemsByUserId",
+              "query": "query getCartItemsByUserId($user_id: uuid = \"\") {\n  ECommerce_carts(where: {user_id: {_eq: $user_id}}) {\n    id\n    created_at\n    updated_at\n    items: cart_items {\n      id\n      product_id\n      quantity\n    }\n  }\n}"
+            },
+            {
+              "name": "getOrdersByUserId",
+              "query": "query getOrdersByUserId($user_id: uuid = \"\") {\n  ECommerce_orders(where: {user_id: {_eq: $user_id}}) {\n    id\n    status\n    total_amount\n    shipping_address\n    payment_status\n    created_at\n    updated_at\n    payments {\n      id\n      payment_method\n      payment_status\n      amount\n      created_at\n    }\n  }\n}"
+            },
+            {
+              "name": "SignIn",
+              "query": "query MyQuery($email: String = \"\", $password: String = \"\") {\n  ECommerce_users(where: {email: {_eq: $email}, password: {_eq: $password}}) {\n    id\n    first_name\n    last_name\n    phone_number\n    email\n    address\n  }\n}"
+            },
+            {
+              "name": "SignUpUser",
+              "query": "mutation SignUpUser($first_name: String = \"\", $last_name: String = \"\", $phone_number: String = \"\", $email: String = \"\", $password: String = \"\", $id: uuid = \"\") {\n  insert_ECommerce_users(objects: {first_name: $first_name, last_name: $last_name, phone_number: $phone_number, email: $email, password: $password, id: $id}) {\n    affected_rows\n  }\n}"
+            }
+          ]
+        }
+      }
+    ],
+    "allowlist": [
+      {
+        "collection": "allowed-queries",
+        "scope": {
+          "global": true
+        }
+      }
+    ],
+    "rest_endpoints": [
+      {
+        "comment": "fetching cart items by user_id",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "getCartItemsByUserId"
+          }
+        },
+        "methods": [
+          "GET"
+        ],
+        "name": "getCartItemsByUserId",
+        "url": "cart/:user_id"
+      },
+      {
+        "comment": "Get Orders By User id",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "getOrdersByUserId"
+          }
+        },
+        "methods": [
+          "GET"
+        ],
+        "name": "getOrdersByUserId",
+        "url": "orders/:user_id"
+      },
+      {
+        "comment": "Sign in user",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "SignIn"
+          }
+        },
+        "methods": [
+          "POST"
+        ],
+        "name": "SignIn",
+        "url": "signin"
+      },
+      {
+        "comment": "Sign up user",
+        "definition": {
+          "query": {
+            "collection_name": "allowed-queries",
+            "query_name": "SignUpUser"
+          }
+        },
+        "methods": [
+          "POST"
+        ],
+        "name": "SignUpUser",
+        "url": "signup"
+      }
+    ],
+    "backend_configs": {
+      "dataconnector": {
+        "Mongo": {
+          "uri": "http://mongo-data-connector:3000"
+        }
+      }
+    }
+  }
+}

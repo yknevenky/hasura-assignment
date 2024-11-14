@@ -1,6 +1,6 @@
-# E-Commerce GraphQL API Documentation
+# Hasura assignment GraphQL API Documentation
 
-This document outlines the queries and mutations used in the E-Commerce GraphQL API.
+This document outlines the queries and mutations used in the Hasura assignment GraphQL API used in the Django server.
 
 ---
 

@@ -35,3 +35,9 @@ Here are additional resources that are important for understanding the full scop
 
 - [Postman collection file](./ecommerce.postman_collection.json)  
   Postman collection file.
+
+- [Private key](./keys/private.pem)  
+  private key used to sign tokens ( used in Django ).
+
+- [Public key](./keys/public.pem)  
+  Public key used to verify tokens ( used in hasura ).

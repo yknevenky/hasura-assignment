@@ -1,7 +1,3 @@
-Here's the GraphQL schema and queries/mutations converted into Markdown for documentation purposes:
-
----
-
 # E-Commerce GraphQL API Documentation
 
 This document outlines the queries and mutations used in the E-Commerce GraphQL API.
@@ -255,7 +251,3 @@ query ViewOrders($user_id: uuid = "") {
     }
 }
 ```
-
---- 
-
-This concludes the documentation for the GraphQL API for E-Commerce. Each query and mutation can be used to interact with the cart, inventory, products, and orders of the system.
